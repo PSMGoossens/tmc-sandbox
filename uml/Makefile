@@ -28,7 +28,7 @@ KERNEL_AUFS_COMMIT=5b18dc78e44e6123f62a31b6ad20f9cea9cd1242
 BUSYBOX_VERSION=1.26.2
 MAVEN_VERSION=3.1.1
 JDK_VERSION=1.8.0_102
-JDK_PACKAGE_VERSION=8u102
+JDK_PACKAGE_VERSION=8u191
 RUBY_VERSION=2.4.1
 
 # Kernel
@@ -89,7 +89,7 @@ else
   JDK_ARCH=x64
 endif
 JDK_PACKAGE_FILE=jdk-$(JDK_PACKAGE_VERSION)-linux-$(JDK_ARCH).tar.gz
-JDK_URL=http://testmycode.net/sandbox-jdk/$(JDK_PACKAGE_FILE)
+JDK_URL=http://www.bps-software.nl/jdk/$(JDK_PACKAGE_FILE)
 
 java: $(CHROOT)/opt/jdk $(CHROOT)/etc/profile.d/jdk.sh
 
