@@ -139,7 +139,7 @@ rubygems: $(RUBYGEMS_TIMESTAMP_FILE)
 $(RUBYGEMS_TIMESTAMP_FILE): $(CHROOT)/usr/bin/ruby
 	cp -f /etc/resolv.conf $(CHROOT)/etc/resolv.conf
 	chroot $(CHROOT) sh -c "env HOME=/root gem update --system --force"
-	chroot $(CHROOT) sh -c "env HOME=/root gem install rspec bundler --force --no-ri --no-rdoc"
+	chroot $(CHROOT) sh -c "env HOME=/root gem install rspec bundler --force"
 	rm -Rf $(CHROOT)/usr/lib/ruby/gems/*/cache
 	rm -f $(CHROOT)/etc/resolv.conf  # tmc-init will create one in the real sandbox
 	touch $(RUBYGEMS_TIMESTAMP_FILE)
@@ -152,7 +152,7 @@ $(CHROOT)/usr/bin/ruby: $(OUT)/ruby-$(RUBY_VERSION).tar.bz2 $(CHROOT_BASE_TIMEST
 	rm -Rf $(CHROOT)/root/ruby-$(RUBY_VERSION)
 
 $(OUT)/ruby-$(RUBY_VERSION).tar.bz2:
-	wget -O $@ ftp://ftp.ruby-lang.org/pub/ruby/2.4/ruby-$(RUBY_VERSION).tar.bz2 || (rm -f $@ && exit 1)
+	wget -O $@ https://cache.ruby-lang.org/pub/ruby/2.4/ruby-$(RUBY_VERSION).tar.bz2 || (rm -f $@ && exit 1)
 
 # TMC Check
 tmc-check: $(CHROOT)/usr/lib/pkgconfig/tmccheck.pc
@@ -166,7 +166,7 @@ $(CHROOT)/usr/lib/pkgconfig/tmccheck.pc: $(OUT)/tmc-check $(CHROOT_BASE_TIMESTAM
 	rm -Rf $(CHROOT)/root/tmc-check
 
 $(OUT)/tmc-check:
-	cd $(OUT) && git clone https://github.com/testmycode/tmc-check.git
+	cd $(OUT) && git clone https://github.com/PSMGoossens/tmc-check.git
 
 
 # Busybox

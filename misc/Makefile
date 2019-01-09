@@ -11,7 +11,7 @@ WORK=work
 dummy_create_work_dir := $(shell test -d $(WORK) || mkdir -p $(WORK))
 
 DNSMASQ_VERSION=2.78
-SQUID_VERSION=3.5.26
+SQUID_VERSION=3.5.28
 
 DNSMASQ_URL=http://www.thekelleys.org.uk/dnsmasq/dnsmasq-$(DNSMASQ_VERSION).tar.gz
 SQUID_URL=http://www.squid-cache.org/Versions/v3/3.5/squid-$(SQUID_VERSION).tar.gz
@@ -50,7 +50,7 @@ $(SQUID_DIR)/src/squid: $(SQUID_DIR)/Makefile
 	make -C $(SQUID_DIR) -j$(SUBMAKE_JOBS)
 
 $(SQUID_DIR)/Makefile: $(SQUID_DIR)/configure
-	cd $(SQUID_DIR) && ./configure --prefix $(SQUIDROOT)
+	cd $(SQUID_DIR) && ./configure --prefix $(SQUIDROOT) --disable-strict-error-checking
 
 $(SQUID_DIR)/configure: $(SQUID_DIR).tar.gz
 	tar -C $(WORK) -xvf $<
