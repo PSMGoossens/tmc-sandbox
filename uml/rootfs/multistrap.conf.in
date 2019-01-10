@@ -3,7 +3,7 @@ arch=__ARCH__
 directory=./output/chroot
 cleanup=false  # We'll tell squashfs to exclude the downloaded packages
 unpack=true
-debootstrap=Debian Updates DebianBackports R
+debootstrap=Debian Updates DebianBackports #R
 aptsources=Debian Updates DebianBackports
 setupscript=./build-scripts/before-dpkg-setup.sh
 
