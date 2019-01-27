@@ -26,10 +26,10 @@ KERNEL_VERSION=4.19.13
 KERNEL_AUFS_BRANCH=aufs4.19
 KERNEL_AUFS_COMMIT=dc68432bc8fed5faf20f2a0889739a13110abdc1
 BUSYBOX_VERSION=1.26.2
-MAVEN_VERSION=3.1.1
+MAVEN_VERSION=3.6.0
 JDK_VERSION=1.8.0_102
 JDK_PACKAGE_VERSION=8u191
-RUBY_VERSION=2.4.1
+RUBY_VERSION=2.6.0
 
 # Kernel
 kernel: $(OUT)/linux.uml
@@ -63,14 +63,14 @@ $(OUT)/rootfs.squashfs: chroot
 
 CHROOT_BASE_TIMESTAMP_FILE=$(CHROOT)/var/log/dpkg.log
 
-chroot: $(CHROOT_BASE_TIMESTAMP_FILE) $(CHROOT)/sbin/tmc-init $(CHROOT)/sbin/fast-shutdown maven ruby tmc-check r-plugin
+chroot: $(CHROOT_BASE_TIMESTAMP_FILE) $(CHROOT)/sbin/tmc-init $(CHROOT)/sbin/fast-shutdown java maven ruby tmc-check #r-plugin
 
 $(OUT)/multistrap.conf: rootfs/multistrap.conf.in
 	sed 's/__ARCH__/$(ARCH)/' < $< > $@
 
 $(CHROOT_BASE_TIMESTAMP_FILE): $(OUT)/multistrap.conf
 	mkdir -p $(CHROOT)
-	multistrap -f $(OUT)/multistrap.conf
+	multistrap --no-auth -f $(OUT)/multistrap.conf
 	echo "en_US.UTF-8 UTF-8" > $(CHROOT)/etc/locale.gen
 	chroot $(CHROOT) /usr/sbin/locale-gen
 	umount $(CHROOT)/proc
@@ -126,7 +126,7 @@ $(CHROOT)/opt/maven: $(CHROOT)/opt/apache-maven-$(MAVEN_VERSION)
 	rm -f $@
 	cd $(CHROOT)/opt && ln -s apache-maven-$(MAVEN_VERSION) maven
 
-$(CHROOT)/etc/maven-settings.template.xml: rootfs/maven-settings.template.xml
+$(CHROOT)/etc/maven-settings.template.xml: rootfs/maven8-settings.template.xml
 	cp -f $< $@
 
 # Ruby
@@ -152,7 +152,7 @@ $(CHROOT)/usr/bin/ruby: $(OUT)/ruby-$(RUBY_VERSION).tar.bz2 $(CHROOT_BASE_TIMEST
 	rm -Rf $(CHROOT)/root/ruby-$(RUBY_VERSION)
 
 $(OUT)/ruby-$(RUBY_VERSION).tar.bz2:
-	wget -O $@ https://cache.ruby-lang.org/pub/ruby/2.4/ruby-$(RUBY_VERSION).tar.bz2 || (rm -f $@ && exit 1)
+	wget -O $@ https://cache.ruby-lang.org/pub/ruby/2.6/ruby-$(RUBY_VERSION).tar.bz2 || (rm -f $@ && exit 1)
 
 # TMC Check
 tmc-check: $(CHROOT)/usr/lib/pkgconfig/tmccheck.pc
